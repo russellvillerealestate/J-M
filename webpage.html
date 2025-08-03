@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Link Hub</title>
+  <meta name="description" content="Connect tenants with rentals, storage, and parking.">
+  <link rel="icon" href="data:,"/>
+
+  <style>
+    :root {
+      --bg: #f5f5f7;
+      --card-bg:#fff;
+      --radius:14px;
+      --shadow:0 24px 50px -12px rgba(0,0,0,0.15);
+      --text:#1f2937;
+      --muted:#6b7280;
+      --link-bg:#1d4ed8;
+      --link-hover:#1e40af;
+      --transition:.25s cubic-bezier(.4,.2,.2,1);
+      font-family: system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      min-height:100vh;
+      background: linear-gradient(135deg,#eef2f7 0%,#ffffff 100%);
+      display:flex;
+      justify-content:center;
+      padding:2rem 1rem;
+      color: var(--text);
+    }
+    .container{
+      width:100%;
+      max-width:420px;
+      text-align:center;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding:1rem 1rem 1.5rem;
+      box-shadow: var(--shadow);
+    }
+    .profile {
+      margin-bottom:0.5rem;
+    }
+    .profile h1 {
+      margin:0;
+      font-size:1.75rem;
+      letter-spacing:0.5px;
+    }
+    .profile p {
+      margin:6px 0 0;
+      font-size:0.95rem;
+      color: var(--muted);
+      line-height:1.4;
+    }
+    .hero {
+      margin: 1rem 0;
+      position: relative;
+    }
+    .hero img {
+      width:100%;
+      border-radius:10px;
+      display:block;
+      object-fit:cover;
+      aspect-ratio:16/9;
+    }
+    .upload-wrapper {
+      margin-top:8px;
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .links {
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      margin:1rem 0 0;
+    }
+    .btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:14px 20px;
+      border-radius:10px;
+      background: var(--link-bg);
+      color:#fff;
+      text-decoration:none;
+      font-weight:600;
+      font-size:1rem;
+      position:relative;
+      overflow:hidden;
+      transition: background var(--transition);
+      border:none;
+      cursor:pointer;
+    }
+    .btn:hover {
+      background: var(--link-hover);
+    }
+    .small {
+      font-size:0.65rem;
+      color: #999;
+      margin-top:1rem;
+      line-height:1.2;
+    }
+    .edit-panel {
+      background:#eef2f7;
+      padding:10px;
+      border-radius:8px;
+      margin-top:16px;
+      text-align:left;
+      font-size:0.85rem;
+    }
+    .edit-panel input[type=text] {
+      width:100%;
+      padding:6px 8px;
+      margin-bottom:6px;
+      border:1px solid #ccc;
+      border-radius:6px;
+    }
+    .edit-row {
+      display:flex;
+      gap:6px;
+      flex-wrap:wrap;
+      margin-bottom:8px;
+    }
+    .edit-row input {
+      flex:1 1 120px;
+    }
+    .small-link {
+      display:inline-block;
+      margin-right:6px;
+      font-size:0.75rem;
+    }
+    .action {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor:pointer;
+      font-size:0.75rem;
+      margin-right:4px;
+    }
+    .action.danger {
+      background: #dc2626;
+    }
+    .flex-row {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:center;
+      margin-top:8px;
+    }
+    .social {
+      margin-top:1.5rem;
+      display:flex;
+      justify-content:center;
+      gap:14px;
+    }
+    .social a {
+      text-decoration:none;
+      color: var(--muted);
+      font-size:0.9rem;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+    }
+    .hidden {
+      display:none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container card" aria-label="Link hub">
+    <div class="profile">
+      <h1 id="title">Your Name / Brand</h1>
+      <p id="subtitle">We help connect tenants with: Apartments/Houses • RV Spots (Monthly Long Term) • Mini-storage • Long term parking for boats, RVs, and trailers</p>
+    </div>
+
+    <div class="hero">
+      <img id="hero-img" src="https://via.placeholder.com/640x360?text=Your+Image" alt="Hero image">
+      <div class="upload-wrapper">
+        <label>
+          <input type="file" accept="image/*" id="upload" style="display:none">
+          <button class="btn" id="upload-btn" type="button">Upload Photo</button>
+        </label>
+        <button class="btn" id="reset-hero" type="button" style="background:#6b7280;">Reset</button>
+      </div>
+      <div style="font-size:0.65rem; color:#555; margin-top:4px;">Upload your own image; it’s previewed here and saved locally in your browser (not sent anywhere).</div>
+    </div>
+
+    <div class="links" id="links-container">
+      <!-- buttons populated by script -->
+    </div>
+
+    <div class="social">
+      <a href="#" target="_blank" rel="noopener" aria-label="Facebook">
+        <span>📘</span><span>Facebook</span>
+      </a>
+    </div>
+
+    <div class="small">
+      <div>© <span id="year"></span> Your Brand. All rights reserved.</div>
+      <div><a href="#" style="color:inherit; text-decoration:underline;">Privacy</a> · <a href="#" style="color:inherit; text-decoration:underline;">Cookies</a></div>
+    </div>
+
+    <div class="edit-panel" aria-label="Edit links and text">
+      <strong>Edit Content</strong>
+      <div class="edit-row">
+        <div style="flex:1">
+          <label>Title</label>
+          <input type="text" id="edit-title" placeholder="Your Name / Brand">
+        </div>
+        <div style="flex:2">
+          <label>Subtitle</label>
+          <input type="text" id="edit-subtitle" placeholder="Short description">
+        </div>
+      </div>
+      <div id="links-edit-list">
+        <!-- existing link editors -->
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px;">
+        <button class="action" id="add-link">+ Add Link</button>
+        <button class="action" id="save-all">Save All</button>
+        <button class="action danger" id="reset-all">Reset to Defaults</button>
+      </div>
+      <div style="font-size:0.65rem; color:#444;">
+        Changes persist in this browser. To make these permanent for others, you’d upload this file and optionally back up your default JSON somewhere or integrate with a simple backend later.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // defaults
+    const DEFAULT_STATE = {
+      title: "Your Name / Brand",
+      subtitle: "We help connect tenants with: Apartments/Houses • RV Spots (Monthly Long Term) • Mini-storage • Long term parking for boats, RVs, and trailers",
+      hero: "",
+      links: [
+        { label: "Facebook", url: "https://www.facebook.com", order: 1 },
+        { label: "Homes & Apartments For Rent", url: "https://www.facebook.com", order: 2 },
+        { label: "CenterValley Storage", url: "https://www.facebook.com", order: 3 }
+      ]
+    };
+
+    // load/save
+    function loadState() {
+      try {
+        return JSON.parse(localStorage.getItem("linkhub_state")) || { ...DEFAULT_STATE };
+      } catch {
+        return { ...DEFAULT_STATE };
+      }
+    }
+    function saveState(s) {
+      localStorage.setItem("linkhub_state", JSON.stringify(s));
+    }
+
+    let state = loadState();
+
+    // render
+    function render() {
+      document.getElementById("title").textContent = state.title;
+      document.getElementById("subtitle").textContent = state.subtitle;
+      document.getElementById("edit-title").value = state.title;
+      document.getElementById("edit-subtitle").value = state.subtitle;
+      if (state.hero) {
+        document.getElementById("hero-img").src = state.hero;
+      }
+
+      // links
+      const linksContainer = document.getElementById("links-container");
+      linksContainer.innerHTML = "";
+      const sorted = [...state.links].sort((a,b)=> (a.order||0)-(b.order||0));
+      sorted.forEach((lnk, idx) => {
+        const a = document.createElement("a");
+        a.className = "btn";
+        a.href = lnk.url;
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.textContent = lnk.label;
+        linksContainer.appendChild(a);
+      });
+
+      // editors
+      const editList = document.getElementById("links-edit-list");
+      editList.innerHTML = "";
+      sorted.forEach((lnk, idx) => {
+        const row = document.createElement("div");
+        row.className = "edit-row";
+        row.dataset.index = idx;
+
+        const labelIn = document.createElement("input");
+        labelIn.type = "text";
+        labelIn.value = lnk.label;
+        labelIn.placeholder = "Label";
+        labelIn.addEventListener("input", () => {
+          state.links[idx].label = labelIn.value;
+        });
+
+        const urlIn = document.createElement("input");
+        urlIn.type = "text";
+        urlIn.value = lnk.url;
+        urlIn.placeholder = "URL";
+        urlIn.addEventListener("input", () => {
+          state.links[idx].url = urlIn.value;
+        });
+
+        const up = document.createElement("button");
+        up.textContent = "↑";
+        up.className = "action";
+        up.title = "Move up";
+        up.addEventListener("click", () => {
+          if (idx === 0) return;
+          [state.links[idx-1], state.links[idx]] = [state.links[idx], state.links[idx-1]];
+          saveState(state);
+          render();
+        });
+
+        const down = document.createElement("button");
+        down.textContent = "↓";
+        down.className = "action";
+        down.title = "Move down";
+        down.addEventListener("click", () => {
+          if (idx === state.links.length -1) return;
+          [state.links[idx+1], state.links[idx]] = [state.links[idx], state.links[idx+1]];
+          saveState(state);
+          render();
+        });
+
+        const remove = document.createElement("button");
+        remove.textContent = "✕";
+        remove.className = "action danger";
+        remove.title = "Remove";
+        remove.addEventListener("click", () => {
+          state.links.splice(idx,1);
+          saveState(state);
+          render();
+        });
+
+        row.append(labelIn, urlIn, up, down, remove);
+        editList.appendChild(row);
+      });
+    }
+
+    // initialize
+    render();
+
+    document.getElementById("edit-title").addEventListener("input", (e)=>{
+      state.title = e.target.value;
+    });
+    document.getElementById("edit-subtitle").addEventListener("input", (e)=>{
+      state.subtitle = e.target.value;
+    });
+
+    document.getElementById("add-link").addEventListener("click", ()=>{
+      state.links.push({ label: "New Link", url: "https://", order: state.links.length + 1 });
+      saveState(state);
+      render();
+    });
+    document.getElementById("save-all").addEventListener("click", ()=>{
+      saveState(state);
+      render();
+      alert("Saved locally in this browser.");
+    });
+    document.getElementById("reset-all").addEventListener("click", ()=>{
+      if (!confirm("Reset everything to the original defaults?")) return;
+      state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+      localStorage.removeItem("linkhub_state");
+      render();
+    });
+
+    // hero upload
+    const uploadInput = document.getElementById("upload");
+    document.getElementById("upload-btn").addEventListener("click", () => {
+      uploadInput.click();
+    });
+    uploadInput.addEventListener("change", (e)=>{
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev)=>{
+        state.hero = ev.target.result;
+        saveState(state);
+        render();
+      };
+      reader.readAsDataURL(file);
+    });
+    document.getElementById("reset-hero").addEventListener("click", ()=>{
+      state.hero = "";
+      saveState(state);
+      render();
+    });
+
+    // footer year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // auto-save on blur
+    window.addEventListener("beforeunload", ()=> saveState(state));
+  </script>
+</body>
+</html>
